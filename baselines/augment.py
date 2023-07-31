@@ -1,9 +1,3 @@
-"""
-
-
-@author: Guanming Chen (emilien_chen@buaa.edu.cn)
-Created on Dec 18, 2022
-"""
 from model import LightGCN
 import numpy as np
 from utils import randint_choice
@@ -11,10 +5,8 @@ import scipy.sparse as sp
 import world
 import torch
 import torch.nn.functional as F
-from sklearn.cluster import KMeans
 from precalcul import precalculate
 import time
-import faiss
 import torch_sparse
 from scipy.sparse import csr_matrix
 from dataloader import dataset

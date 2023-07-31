@@ -1,9 +1,3 @@
-"""
-
-
-@author: Guanming Chen (emilien_chen@buaa.edu.cn)
-Created on Dec 18, 2022
-"""
 import argparse
 
 

@@ -16,5 +16,5 @@ valid = 0
 c = 'NTS'
 
 # for method in ['LightPopMix', 'LightPopMix_wo_p', 'LightPopMix_lambda', 'LightPopMix_tau']:
-for method in ['LightPopMix_lambda', 'LightPopMix_tau']:
-    os.system(f'python run.py --dataset {dataset} --method {method} --device {device} --seed {seed} --visual {visual} --valid {valid} --c{c}')
+for method in ['LightPopMix_tau','LightPopMix_lambda']:
+    os.system(f'python run.py --dataset {dataset} --method {method} --device {device} --seed {seed} --visual {visual} --valid {valid} --c {c}')

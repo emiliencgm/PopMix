@@ -74,14 +74,14 @@ if args.method == 'BC':
                     --dataset {args.dataset} --cuda {args.device} --comment _ --if_valid {args.valid} --if_visual {args.visual} --visual_epoch 5 --seed {args.seed} --c {args.c}')
         
 if args.method == 'Adaloss':
-    if args.dataset in ['yelp2018', 'gowalla', 'amazon-book', 'last-fm']:
+    if args.dataset in ['yelp2018', 'gowalla', 'amazon-book']:
         temp_tau = 0.1
         lambda1 = 0.1
         centroid = 'eigenvector'
         os.system(f'python main.py --project {project} --name {args.method} --notes Ablation_only_Adaloss --tag Ablation_loss --group ours --job_type {args.dataset} --model LightGCN --loss Adaptive --augment No --lambda1 {lambda1} --temp_tau {temp_tau} --centroid_mode {centroid}\
                     --dataset {args.dataset} --cuda {args.device} --comment _ --if_valid {args.valid} --if_visual {args.visual} --visual_epoch 5 --seed {args.seed} --c {args.c}')
     
-    if args.dataset in ['ifashion']:
+    if args.dataset in ['ifashion', 'last-fm']:
         temp_tau = 0.1
         lambda1 = 0.1
         centroid = 'pagerank'

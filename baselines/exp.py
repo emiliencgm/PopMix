@@ -16,4 +16,4 @@ valid = 0
 c = 'NTS'
 
 for method in ['LightGCN', 'GTN', 'SGL-ED', 'SGL-RW', 'SimGCL', 'PDA', 'BC', 'Adaloss']:
-    os.system(f'python run.py --dataset {dataset} --method {method} --device {device} --seed {seed} --visual {visual} --valid {valid} --c{c}')
+    os.system(f'python run.py --dataset {dataset} --method {method} --device {device} --seed {seed} --visual {visual} --valid {valid} --c {c}')

@@ -47,14 +47,14 @@ elif args.method == 'LightPopMix_tau':
     if args.dataset in ['yelp2018', 'gowalla', 'amazon-book']:
         lambda1 = 0.1
         centroid = 'eigenvector'
-        for temp_tau in [0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16]:
+        for temp_tau in [0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15]:
             os.system(f'python main.py --project {project} --name {args.method} --notes Ablation_tau --tag Ablation_tau --group ours --job_type {args.dataset} --model LightGCN --loss Adaptive --augment No --lambda1 {lambda1} --temp_tau {temp_tau} --centroid_mode {centroid}\
                         --sampling uii --dataset {args.dataset} --cuda {args.device} --comment _ --if_valid {args.valid} --if_visual {args.visual} --visual_epoch 5 --seed {args.seed} --c {args.c}')
     
     if args.dataset in ['ifashion', 'last-fm']:
         lambda1 = 0.1
         centroid = 'pagerank'
-        for ltemp_tau in [0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16]:
+        for temp_tau in [0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15]:
             os.system(f'python main.py --project {project} --name {args.method} --notes Ablation_tau --tag Ablation_tau --group ours --job_type {args.dataset} --model LightGCN --loss Adaptive --augment No --lambda1 {lambda1} --temp_tau {temp_tau} --centroid_mode {centroid}\
                         --sampling uii --dataset {args.dataset} --cuda {args.device} --comment _ --if_valid {args.valid} --if_visual {args.visual} --visual_epoch 5 --seed {args.seed} --c {args.c}')
 

@@ -1,17 +1,3 @@
-'''
-Modified by Guanming Chen from GTN:
-## GTN-pytorch
-"Graph Trend Filtering Networks for Recommendations", Accepted by SIGIR'2022.
-Pytorch Implementation of GTN in Graph Trend Filtering Networks for Recommendations
-The original version of this code base was from LightGCN-pytorch: https://github.com/gusye1234/LightGCN-PyTorch
-
-@inproceedings{fan2022graph,
-  title={Graph Trend Filtering Networks for Recommendations},
-  author={Fan, Wenqi and Liu, Xiaorui and Jin, Wei and Zhao, Xiangyu and Tang, Jiliang and Li, Qing},
-  booktitle={International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR)},
-  year={2022}
-}
-'''
 
 from typing import Optional, Tuple
 from torch_geometric.typing import Adj, OptTensor

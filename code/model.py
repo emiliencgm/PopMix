@@ -1,9 +1,3 @@
-"""
-
-
-@author: Guanming Chen (emilien_chen@buaa.edu.cn)
-Created on Dec 18, 2022
-"""
 import world
 import torch
 from torch import nn
@@ -13,44 +7,6 @@ from torch_geometric.nn import LGConv
 from torch_geometric.nn import GCNConv
 from torch.nn import ModuleList
 import numpy as np
-
-class LGN_Encoder(torch.nn.Module):
-    def __init__(self, n_layers, num_users, num_items):
-        super(LGN_Encoder, self).__init__()
-        self.n_layers = n_layers
-        self.num_users, self.num_items = num_users, num_items
-        self.convs = ModuleList([LGConv() for _ in range(n_layers)])
-        self.alpha = 1. / (n_layers + 1)
-        self.bn = torch.nn.BatchNorm1d(self.dim)
-
-    def forward(self, x, edge_index):
-        out = x * self.alpha
-        for i in range(self.n_layers):
-            x = self.convs[i](x, edge_index)
-            out = out + x * self.alpha
-        out = self.bn(out)
-        users, items = torch.split(out, [self.num_users, self.num_items])
-        return users, items
-    
-class GCN_Encoder(torch.nn.Module):
-    def __init__(self, n_layers, num_users, num_items):
-        super(GCN_Encoder, self).__init__()
-        self.n_layers = n_layers
-        self.dim = world.config['latent_dim_rec']
-        self.num_users, self.num_items = num_users, num_items
-        self.convs = ModuleList([GCNConv(self.dim,self.dim) for _ in range(n_layers)])
-        self.alpha = 1. / (n_layers + 1)
-        self.bn = torch.nn.BatchNorm1d(self.dim)
-
-    def forward(self, x, edge_index):
-        # out = x * self.alpha
-        for i in range(self.n_layers):
-            x = self.convs[i](x, edge_index)
-            # out = out + x * self.alpha
-        x = self.bn(x)#TODO BatchNorm
-        users, items = torch.split(x, [self.num_users, self.num_items])
-        return users, items
-
 
     
 class LightGCN(nn.Module):
