@@ -42,7 +42,7 @@ def main():
     notes = world.config['notes']
     group = world.config['group']
     job_type = world.config['job_type']
-    os.environ['WANDB_MODE'] = 'dryrun'
+    # os.environ['WANDB_MODE'] = 'dryrun'
     wandb.init(project=project, name=name, tags=tag, group=group, job_type=job_type, config=world.config, save_code=True, sync_tensorboard=False, notes=notes)
     wandb.define_metric("epoch")
     wandb.define_metric(f"{world.config['dataset']}"+'/loss', step_metric='epoch')
