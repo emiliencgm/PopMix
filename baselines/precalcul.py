@@ -177,8 +177,10 @@ class Pop():
         plt.yscale('log')
 
         # 设置横纵坐标标签
-        plt.xlabel('#interactions of item', fontsize=18)
-        plt.ylabel('#items', fontsize=18)
+        plt.xlabel('#interactions of item', fontsize=20)
+        plt.ylabel('#items', fontsize=20)
+        plt.xticks(fontsize=16)  # Adjust the x-axis tick label font size
+        plt.yticks(fontsize=16)  # Adjust the y-axis tick label font size
 
         # 只显示散点图，不绘制其他图形
         plt.scatter(x, y, color='#8ECFC9', marker='o', s=30, alpha=0.8)
@@ -327,6 +329,7 @@ class Centroid():
 
         for i in range(k):
             edge_msg = PR[nodes_out] / deg_out[nodes_out]
+            nodes_in = nodes_in.long()
             agg_msg = torch_scatter.scatter(edge_msg, nodes_in, reduce='sum')
 
             PR = (1 - damp) * PR + damp * agg_msg

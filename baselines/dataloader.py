@@ -347,7 +347,7 @@ class dataset(Dataset):
         edge's indices start from 1, so that 0 means no edge\n
         -1 when use this index
         '''
-        index = torch.stack([torch.tensor(self.trainUser), torch.tensor(self.trainItem)])
+        index = torch.stack([torch.tensor(self.trainUser).to(torch.int64), torch.tensor(self.trainItem).to(torch.int64)])
         val =torch.arange(len(self.trainItem)) + 1
         edge_indice = torch.sparse.FloatTensor(index, val, (self.n_user, self.m_item))
         edge_indice = edge_indice.coalesce()

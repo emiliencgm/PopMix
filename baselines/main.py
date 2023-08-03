@@ -32,13 +32,17 @@ def grouped_recall(epoch, result):
     return current_best_recall_group
 
 def main():
+    print('DEVICE:',world.device, world.args.cuda)
+    #print(torch.cuda.get_device_name(torch.cuda.current_device()))
+    print(torch.cuda.get_device_name(world.device))
+    
     project = world.config['project']
     name = world.config['name']
     tag = world.config['tag']
     notes = world.config['notes']
     group = world.config['group']
     job_type = world.config['job_type']
-    # os.environ['WANDB_MODE'] = 'dryrun'
+    os.environ['WANDB_MODE'] = 'dryrun'
     wandb.init(project=project, name=name, tags=tag, group=group, job_type=job_type, config=world.config, save_code=True, sync_tensorboard=False, notes=notes)
     wandb.define_metric("epoch")
     wandb.define_metric(f"{world.config['dataset']}"+'/loss', step_metric='epoch')

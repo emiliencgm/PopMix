@@ -292,6 +292,7 @@ class Centroid():
 
         for i in range(k):
             edge_msg = PR[nodes_out] / deg_out[nodes_out]
+            nodes_in = nodes_in.long()
             agg_msg = torch_scatter.scatter(edge_msg, nodes_in, reduce='sum')
 
             PR = (1 - damp) * PR + damp * agg_msg

@@ -192,7 +192,7 @@ class Classifier(torch.nn.Module):
         return loss and test accuracy of the same batch before update
         '''
         batch_item = batch_item.cpu()
-        batch_label = torch.tensor(self.all_label[batch_item]).to(world.device)
+        batch_label = torch.tensor(self.all_label[batch_item], dtype=torch.long).to(world.device)
         outputs = self.net(inputs)
         CE_loss = self.criterion(outputs, batch_label)
 

@@ -105,7 +105,7 @@ class Quantify():
             scatter_user = plt.scatter(X[len(items):, 0], X[len(items):, 1], c=label_user, cmap=custom_colors_users, s=20, label=classes_user, zorder=1)
 
             # 设置图例字体大小
-            plt.rcParams.update({'legend.fontsize': 14})
+            plt.rcParams.update({'legend.fontsize': 20})
 
             # 设置图例位置并添加图例
             legend_item = plt.legend(handles=scatter_item.legend_elements()[0], labels=classes_item, loc='upper left')
@@ -222,7 +222,7 @@ class Quantify():
             cold_item = torch.tensor(cold_item)
 
             # 绘制散点图，调整点的大小、颜色和透明度
-            plt.scatter(X[0, 0], X[0, 1], s=500, c='#D1ECB9', marker='*', alpha=1.0, label=classes[0], edgecolors='#999999', zorder=3)
+            plt.scatter(X[0, 0], X[0, 1], s=600, c='#D1ECB9', marker='*', alpha=1.0, label=classes[0], edgecolors='#999999', zorder=3)
 
             index_Pos_Hot_item = torch.cat((torch.tensor([0]), torch.mul(pos_item, hot_item))).to(torch.bool)
             index_Pos_Cold_item = torch.cat((torch.tensor([0]), torch.mul(pos_item, cold_item))).to(torch.bool)
@@ -235,7 +235,7 @@ class Quantify():
             plt.scatter(X[index_Neg_Cold_item, 0], X[index_Neg_Cold_item, 1], s=40, c='#6DC3F2', marker='o', alpha=0.4, label=classes[4], zorder=1)
 
             # 设置图例字体大小
-            plt.rcParams.update({'legend.fontsize': 14})
+            plt.rcParams.update({'legend.fontsize': 20})
 
             # 去除x和y轴刻度标签
             plt.xticks([])
