@@ -151,7 +151,7 @@ class dataset():
             self.__validDict = self.__build_valid()
         # self._edge_indices = self.get_edge_indices()
         #将计算邻接矩阵的过程提前
-        # self.getSparseGraph()
+        self.getSparseGraph()
         self.get_edge_index()
 
         print(f"{config['dataset']} is ready to go")

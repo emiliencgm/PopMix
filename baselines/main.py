@@ -22,6 +22,7 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import json
 
 def grouped_recall(epoch, result):
     current_best_recall_group = np.zeros((world.config['pop_group'], len(world.config['topks'])))
@@ -30,6 +31,9 @@ def grouped_recall(epoch, result):
         for group in range(world.config['pop_group']):
             current_best_recall_group[group, i] = result['recall_pop_Contribute'][group][i]
     return current_best_recall_group
+
+def NDCG20_with_best_recall(epoch, result):
+    return result['ndcg'][0]
 
 def main():
     print('DEVICE:',world.device, world.args.cuda)
@@ -61,6 +65,7 @@ def main():
 
     for group in range(world.config['pop_group']):
         wandb.define_metric(f"{world.config['dataset']}"+f"/groups/Rating_group_{group+1}", step_metric='epoch')
+
 
 
     world.make_print_to_file()
@@ -121,6 +126,11 @@ def main():
         best_result_ndcg = 0.
         stopping_step = 0
         best_result_recall_group = None
+        ndcg_with_best_recall_20 = None
+        Recall_40 = []
+        NDCG_40 = []
+        finished = 0
+
         if world.config['if_valid']:
             best_valid_recall = 0.
             stopping_valid_step = 0
@@ -181,6 +191,10 @@ def main():
                     #====================TEST====================
                     cprint("[TEST]")
                     result = test.test(dataset, Recmodel, precal, epoch, w, world.config['if_multicore'])
+
+                    Recall_40.append(result["recall"][1])
+                    NDCG_40.append(result["ndcg"][1])
+
                     if result["recall"][0] > best_result_recall:#默认按照@20的效果early stop
                         stopping_step = 0
                         advance = (result["recall"][0] - best_result_recall)
@@ -188,6 +202,7 @@ def main():
                         # print("find a better model")
                         cprint_rare("find a better recall", str(best_result_recall), extra='++'+str(advance))
                         best_result_recall_group = grouped_recall(epoch, result)
+                        ndcg_with_best_recall_20 = NDCG20_with_best_recall(epoch, result)
                         wandb.run.summary['best test recall'] = best_result_recall  
 
                         #torch.save(Recmodel.state_dict(), weight_file)
@@ -196,6 +211,15 @@ def main():
                         if stopping_step >= world.config['early_stop_steps']:
                             print(f"early stop triggerd at epoch {epoch}, best recall: {best_result_recall}, in group: {best_result_recall_group}")
                             #将当前参数配置和获得的最佳结果记录
+                            
+                            finished = 1
+
+                            max_index = Recall_40.index(max(Recall_40))
+
+                            my_table = wandb.Table(columns=["Name",               "Tag",               "Dataset",                "Best Recall@20",     "NDCG@20 for best Recall@20",   "Best Recall@40 before Early Stop", "NDCG@40 for best Recall@40", "Recall(1)@20", "Recall(2)@20", "Recall(3)@20", "Recall(4)@20", "Recall(5)@20", "Recall(6)@20", "Recall(7)@20", "Recall(8)@20", "Recall(9)@20", "Recall(10)@20"], 
+                                                    data= [[world.config['name'], world.config['tag'][0], world.config['dataset'],  best_result_recall,   ndcg_with_best_recall_20,       Recall_40[max_index],                NDCG_40[max_index],           best_result_recall_group[0,0],best_result_recall_group[1,0],best_result_recall_group[2,0],best_result_recall_group[3,0],best_result_recall_group[4,0],best_result_recall_group[5,0],best_result_recall_group[6,0],best_result_recall_group[7,0],best_result_recall_group[8,0],best_result_recall_group[9,0]]] )
+                            wandb.log({"Summary Table": my_table})   
+
                             break
                         
                     if world.config['if_visual'] == 1:
@@ -219,10 +243,24 @@ def main():
                 
 
     finally:
+        if finished == 0:
+            api = wandb.Api()
+            run = api.run(f"{wandb.run.entity}/{wandb.run.project}/{wandb.run.id}")
+            meta = json.load(run.file("wandb-metadata.json").download(replace=True))#TODO replace=True or exist_ok=True
+            program = ["python"] + [meta["program"]] + meta["args"]
+            rerun_cmd = str(' '.join(program))
+
+            debug_table = wandb.Table(
+                            columns=["Name",               "Tag",               "Dataset",                 "rerun_cmd"], 
+                            data=   [[world.config['name'], world.config['tag'][0], world.config['dataset'],   rerun_cmd]] )
+            wandb.log({"Debug Re-run": debug_table})
+
+
         cprint(world.config['c'])
         w.close()
         wandb.finish()
         cprint(world.config['c'])
+
 
 
 if __name__ == '__main__':
